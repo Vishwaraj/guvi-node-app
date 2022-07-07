@@ -4,14 +4,15 @@ const app = express()
 const PORT = 4000;
 
 app.get('/', function (req, res) {
-  res.send('Hello World')
+  res.send('Hello World !!!')
 })
 
 app.listen(PORT, () => console.log(`App started at ${PORT}`));
 
+// control + c stops the server //
 
-// get movies
 
+//------- get movies route
 
 const movieData = [
     {
@@ -94,10 +95,14 @@ const movieData = [
     }
   ]
   
-
-
 app.get('/movies', function(request, response) {
 response.send(movieData);
 })
 
-// control + c stops the server //
+app.get('/movies/:id', function(request, response) {
+    const {id} = request.params;
+    console.log(request.params);
+    const movie = movieData.find((movie) => movie.id === id);
+
+    movie ? response.send(movie) : response.send('Not Found');
+})
