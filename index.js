@@ -1,4 +1,7 @@
-const express = require('express')
+
+import express from 'express'
+import {MongoClient} from 'mongodb'
+
 const app = express()
 
 const PORT = 4000;
@@ -12,7 +15,7 @@ app.listen(PORT, () => console.log(`App started at ${PORT}`));
 // control + c stops the server //
 
 
-//------- get movies route
+
 
 const movieData = [
     {
@@ -94,15 +97,73 @@ const movieData = [
       trailer: "https://www.youtube.com/embed/NgsQ8mVkN8w"
     }
   ]
+
+
+// Express middleware to convert data to json
+
+//this is the middleware and now we are using it globally for the app.
+app.use(express.json());
+
+
+
+
+// ----------MONGO DB CONNECTION---------------------------------
+
+//mongo db url --
+const MONGO_URL = 'mongodb+srv://vishwaraj:9637774387@cluster0.7e9vyv6.mongodb.net';
+
+
+//mongo db connection function --
+async function createConnection() {
+  const client = new MongoClient(MONGO_URL);
+ await client.connect();
+  console.log('MongoDB is connected');
+  return client;
+}
+
+
+//mongo db connection function call --
+const client = await createConnection();
   
-app.get('/movies', function(request, response) {
-response.send(movieData);
+
+//----------MONGODB CONNECTION CODE ENDS-------------------------------
+
+
+
+//------- get movies route
+app.get('/movies', async function(request, response) {
+// response.send(movieData);
+
+const allMovies = await client.db("guvi-db").collection("movies").find({}).toArray();
+response.send(allMovies);
+
 })
 
-app.get('/movies/:id', function(request, response) {
+
+
+//--------THIS REQUEST IS GETTING MOVIE DATA FROM MONGODB----------------
+app.get('/movies/:id', async function(request, response) {
     const {id} = request.params;
     console.log(request.params);
-    const movie = movieData.find((movie) => movie.id === id);
+    // const movie = movieData.find((movie) => movie.id === id);
 
-    movie ? response.send(movie) : response.send('Not Found');
+
+    //this code fetches single movie data from mongoDB
+    const movie = await client.db("guvi-db").collection("movies").findOne({id: id});
+
+
+    movie ? response.send(movie) : response.status(404).send('Not Found');
 })
+
+
+
+//POST REQUEST TO MONGODB
+
+app.post("/movies",express.json(), async function(request, response) {
+
+  const data = request.body;
+
+  const status = await client.db("guvi-db").collection("movies").insertMany(data);
+
+  response.send(status);
+});
