@@ -1,6 +1,10 @@
 
 import express from 'express'
 import {MongoClient} from 'mongodb'
+import dotenv from 'dotenv'
+
+dotenv.config();
+console.log(process.env.MONGO_URL);
 
 const app = express()
 
@@ -110,7 +114,7 @@ app.use(express.json());
 // ----------MONGO DB CONNECTION---------------------------------
 
 //mongo db url --
-const MONGO_URL = 'mongodb+srv://vishwaraj:9637774387@cluster0.7e9vyv6.mongodb.net';
+const MONGO_URL = process.env.MONGO_URL;
 
 
 //mongo db connection function --
