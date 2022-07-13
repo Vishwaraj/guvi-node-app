@@ -43,7 +43,7 @@ router.get("/", async function (request, response) {
     const status = await client
       .db("guvi-db")
       .collection("movies")
-      .insertMany(data);
+      .insertOne(data);
   
     response.send(status);
   });

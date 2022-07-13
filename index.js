@@ -3,10 +3,14 @@ import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
 import { ObjectId } from "mongodb"; // this is needed to fetch data using object id as we have to convert it to
 import {moviesRouter} from './routes/movies.js'
+import cors from 'cors';
+
+
 
 dotenv.config();
 
 const app = express();
+app.use(cors());
 
 const PORT = process.env.PORT;
 
