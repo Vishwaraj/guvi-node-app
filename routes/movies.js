@@ -1,6 +1,8 @@
 import express from "express";
 const router = express.Router();
 import {client} from '../index.js'
+import { ObjectId } from "mongodb"; // this is needed to fetch data using object id as we have to convert it to
+
 
 // All Movie Routes
 
@@ -25,12 +27,12 @@ router.get("/", async function (request, response) {
     const { id } = request.params;
     console.log(request.params);
     // const movie = movieData.find((movie) => movie.id === id);
-  
+    console.log(id);
     //this code fetches single movie data from mongoDB
     const movie = await client
       .db("guvi-db")
       .collection("movies")
-      .findOne({ id: id });
+      .findOne({ _id: ObjectId(id) });
   
     movie ? response.send(movie) : response.status(404).send("Not Found");
   });

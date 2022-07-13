@@ -1,9 +1,10 @@
 import express, { application } from "express";
 import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
-import { ObjectId } from "mongodb"; // this is needed to fetch data using object id as we have to convert it to
 import {moviesRouter} from './routes/movies.js'
 import cors from 'cors';
+import {usersRouter} from './routes/users.js'
+
 
 
 
@@ -49,3 +50,4 @@ export const client = await createConnection();
 
 // for movie routes
 app.use("/movies", moviesRouter);
+app.use("/users", usersRouter);
