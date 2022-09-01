@@ -10,7 +10,7 @@ import {auth} from "../middleware/auth.js";
 
 //------- get movies route and search functionality--------------------
 router.get("/", auth ,async function (request, response) {
-    console.log(request.query);
+
     if (request.query.rating) {
       request.query.rating = +request.query.rating;
     }
@@ -26,9 +26,9 @@ router.get("/", auth ,async function (request, response) {
   //--------THIS REQUEST IS GETTING MOVIE DATA FROM MONGODB----------------
   router.get("/:id", async function (request, response) {
     const { id } = request.params;
-    console.log(request.params);
+    
     // const movie = movieData.find((movie) => movie.id === id);
-    console.log(id);
+  
     //this code fetches single movie data from mongoDB
     const movie = await client
       .db("guvi-db")
@@ -40,7 +40,7 @@ router.get("/", auth ,async function (request, response) {
   
   //POST REQUEST TO MONGODB
   
-  router.post("/", express.json(), async function (request, response) {
+  router.post("/", auth, async function (request, response) {
     const data = request.body;
   
     const status = await client
@@ -59,7 +59,7 @@ router.get("/", auth ,async function (request, response) {
     const deleted = await client
       .db("guvi-db")
       .collection("movies")
-      .deleteOne({ id: id });
+      .deleteOne({ _id: ObjectId(id) });
   
     deleted.result > 0
       ? response.send(deleted)
@@ -71,11 +71,12 @@ router.get("/", auth ,async function (request, response) {
   router.put("/:id", async function (request, response) {
     const { id } = request.params;
     const data = request.body;
+    console.log(data);
   
     const updated = await client
       .db("guvi-db")
       .collection("movies")
-      .updateOne({ id: id }, { $set: data });
+      .updateOne({ _id: ObjectId(id) }, { $set: data });
   
     response.send(updated);
   });

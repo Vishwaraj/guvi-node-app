@@ -28,7 +28,7 @@ router.post("/signup", async function (request, response) {
     
 
     if(searchUsername) {
-        response.send({msg: "Username already exists"});
+        response.status(400).send({msg: "Username already exists"});
     } else if (password.length < 8) {
         response.send({msg: "Required Password length is 8"});
     } else {
@@ -57,7 +57,7 @@ router.post("/login", async function(request, response) {
     const checkUsername = await checkUserExists(username);
 
     if(!checkUsername) {
-     response.send({msg: "Invalid Credentials"});
+     response.status(400).send({msg: "Invalid Credentials"});
     } else {
         const storedPassword = checkUsername.password;
 
