@@ -2,13 +2,14 @@ import express from "express";
 const router = express.Router();
 import {client} from '../index.js'
 import { ObjectId } from "mongodb"; // this is needed to fetch data using object id as we have to convert it to
+import {auth} from "../middleware/auth.js";
 
 
 // All Movie Routes
 
 
 //------- get movies route and search functionality--------------------
-router.get("/", async function (request, response) {
+router.get("/", auth ,async function (request, response) {
     console.log(request.query);
     if (request.query.rating) {
       request.query.rating = +request.query.rating;

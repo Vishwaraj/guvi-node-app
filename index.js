@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import {moviesRouter} from './routes/movies.js'
 import cors from 'cors';
 import {usersRouter} from './routes/users.js'
+import {mobilesRouter} from './routes/mobiles.js'
+import {registerRouter} from './routes/register.js'
 
 
 
@@ -50,4 +52,11 @@ export const client = await createConnection();
 
 // for movie routes
 app.use("/movies", moviesRouter);
+
+//for user routes
 app.use("/users", usersRouter);
+
+//for mobile phones
+app.use("/mobiles", mobilesRouter);
+
+app.use("/register", registerRouter);
